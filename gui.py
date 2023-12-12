@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from pynput import keyboard
 import tkinter as tk
+import threading
 
 def open_next_link():
     global current_link_index, driver
@@ -25,6 +27,10 @@ def open_next_link():
     except FileNotFoundError:
         print("The links file was not found.")
 
+def on_press(key):
+    if key == keyboard.Key.media_volume_mute:
+        open_next_link()
+
 # Set Firefox options to enable autoplay
 firefox_options = Options()
 firefox_options.set_preference("media.autoplay.default", 0)  # 0 means "Allow all", 1 means "Block all"
@@ -36,13 +42,20 @@ driver = webdriver.Firefox(options=firefox_options)
 
 current_link_index = 0
 
+# Setup the GUI
 root = tk.Tk()
 root.title("YouTube Player")
 
 open_link_button = tk.Button(root, text="Play Next Video", command=open_next_link)
 open_link_button.pack(pady=20)
 
+# Start the listener for the button press in a separate thread
+listener = keyboard.Listener(on_press=on_press)
+listener.start()
+
+# Start the GUI event loop
 root.mainloop()
 
-# Close the browser when the GUI is closed
+# Clean up
+listener.stop()
 driver.quit()
