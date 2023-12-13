@@ -1,0 +1,32 @@
+# .gitignore
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Package directories
+node_modules/
+jspm_packages/
+bower_components/
+
+# Log files
+npm-debug.log
+yarn-error.log
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipynb_checkpoints
+*.swp
+*.swo
+*.swn
+*.bak
+*.bak.*
+*.tmp
+*.tmp.*
+*.sublime-*
+
+# Build directories
+build/
+dist/
