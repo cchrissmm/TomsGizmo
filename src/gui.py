@@ -28,7 +28,7 @@ def open_next_link():
         print("The links file was not found.")
 
 def on_press(key):
-    if key == keyboard.Key.media_volume_mute:
+    if str(key) == "'b'":
         open_next_link()
 
 # Set Firefox options to enable autoplay
