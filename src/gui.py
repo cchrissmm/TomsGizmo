@@ -4,6 +4,11 @@ from pynput import keyboard
 import tkinter as tk
 import threading
 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
 def open_next_link():
     global current_link_index, driver
     try:
@@ -20,6 +25,20 @@ def open_next_link():
 
             # Open the link in the browser
             driver.get(url)
+
+            # Wait for the video to load
+            wait = WebDriverWait(driver, 10)
+            video = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'video')))
+
+            # Play the video
+            video.click()
+
+            # Wait for the fullscreen button to become clickable
+            fullscreen_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.ytp-fullscreen-button.ytp-button')))
+
+            # Click the fullscreen button
+            fullscreen_button.click()
+
 
             # Increment the index for the next link
             current_link_index += 1
@@ -39,6 +58,9 @@ firefox_options.set_preference("media.autoplay.block-webaudio", False)
 
 # Initialize the browser driver with the custom options
 driver = webdriver.Firefox(options=firefox_options)
+
+# Open the browser in fullscreen mode
+driver.fullscreen_window()
 
 current_link_index = 0
 
