@@ -27,6 +27,3 @@ yarn-error.log
 *.tmp.*
 *.sublime-*
 
-# Build directories
-build/
-dist/
