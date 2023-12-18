@@ -67,6 +67,7 @@ current_link_index = 0
 # Setup the GUI
 root = tk.Tk()
 root.title("YouTube Player")
+root.iconify()  # This will start the window minimized
 
 open_link_button = tk.Button(root, text="Play Next Video", command=open_next_link)
 open_link_button.pack(pady=20)
