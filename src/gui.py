@@ -92,8 +92,16 @@ root = tk.Tk()
 root.title("YouTube Player")
 root.geometry('400x400')  # Window size
 
-open_link_button = tk.Button(root, text="Play Next Video", command=open_next_link)
-open_link_button.pack(pady=10)
+# Create a frame to hold the buttons
+button_frame = tk.Frame(root)
+button_frame.pack(pady=10)
+
+open_link_button = tk.Button(button_frame, text="Play Next Video", command=open_next_link)
+open_link_button.pack(side=tk.LEFT)
+
+# Add a quit button
+quit_button = tk.Button(button_frame, text="Quit", command=root.quit)
+quit_button.pack(side=tk.LEFT)
 
 log_text = scrolledtext.ScrolledText(root, state='disabled', height=10)
 log_text.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
