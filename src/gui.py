@@ -1,65 +1,88 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-from pynput import keyboard
-import tkinter as tk
-import threading
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, WebDriverException, NoSuchElementException
+import tkinter as tk
+from tkinter import messagebox, scrolledtext
+from pynput import keyboard
 
+def show_network_error_dialog():
+    """Shows a dialog box for network errors with retry and exit options."""
+    root.deiconify()
+    response = messagebox.askretrycancel("Network Error", "Check your internet connection.")
+    if response:
+        open_next_link()
+    else:
+        driver.quit()
+        root.quit()
+
+def update_gui_log(message):
+    """Updates the GUI with the provided message."""
+    log_text.configure(state='normal')
+    log_text.insert(tk.END, message + "\n")
+    log_text.configure(state='disabled')
+    log_text.see(tk.END)
 
 def open_next_link():
+    """Opens the next link from the file and handles various errors."""
     global current_link_index, driver
     try:
         with open("links.txt", "r") as file:
             links = file.readlines()
             if not links:
-                print("The links file is empty.")
+                update_gui_log("The links file is empty.")
                 return
 
             if current_link_index >= len(links):
-                current_link_index = 0  # Loop back to the start
+                current_link_index = 0
 
             url = links[current_link_index].strip()
+            if not url:
+                update_gui_log("Encountered an empty URL in the list.")
+                current_link_index += 1
+                if current_link_index < len(links):
+                    open_next_link()
+                return
 
-            # Open the link in the browser
             driver.get(url)
 
             # Maximize the browser window
             driver.maximize_window()
-
             # Wait for the page to load and then play the video
             WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'video')))
             driver.execute_script("document.querySelector('video').play();")
-
             # Wait for the fullscreen button to become clickable
             fullscreen_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.ytp-fullscreen-button.ytp-button')))
-
             # Click the fullscreen button
             fullscreen_button.click()
-
-
-            # Increment the index for the next link
             current_link_index += 1
 
-    except FileNotFoundError:
-        print("The links file was not found.")
+    except (FileNotFoundError, IOError) as e:
+        update_gui_log(f"File error: {e}")
+    except (TimeoutException, NoSuchElementException, WebDriverException) as e:
+        update_gui_log(f"Error with the link: {e}. Moving to next link.")
+        current_link_index += 1
+        if current_link_index < len(links):
+            open_next_link()
+    except Exception as e:
+        update_gui_log(f"An unexpected error occurred: {e}. Showing network error dialog.")
+        show_network_error_dialog()
 
 def on_press(key):
+    """Handles keyboard press events."""
     if str(key) == "'b'":
         open_next_link()
 
-# Set Firefox options to enable autoplay
+# Firefox options to enable autoplay
 firefox_options = Options()
-firefox_options.set_preference("media.autoplay.default", 0)  # 0 means "Allow all", 1 means "Block all"
+firefox_options.set_preference("media.autoplay.default", 0)
 firefox_options.set_preference("media.autoplay.enabled.user-gestures-needed", False)
 firefox_options.set_preference("media.autoplay.block-webaudio", False)
 
-# Initialize the browser driver with the custom options
+# Initialize browser driver
 driver = webdriver.Firefox(options=firefox_options)
-
-# Open the browser in fullscreen mode
 driver.fullscreen_window()
 
 current_link_index = 0
@@ -67,18 +90,21 @@ current_link_index = 0
 # Setup the GUI
 root = tk.Tk()
 root.title("YouTube Player")
-root.iconify()  # This will start the window minimized
+root.geometry('400x400')  # Window size
 
 open_link_button = tk.Button(root, text="Play Next Video", command=open_next_link)
-open_link_button.pack(pady=20)
+open_link_button.pack(pady=10)
 
-# Start the listener for the button press in a separate thread
+log_text = scrolledtext.ScrolledText(root, state='disabled', height=10)
+log_text.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+
+# Listener for button press
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
 # Start the GUI event loop
 root.mainloop()
 
-# Clean up
+# Cleanup
 listener.stop()
 driver.quit()
