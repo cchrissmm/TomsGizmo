@@ -45,6 +45,9 @@ def open_next_link():
                 if current_link_index < len(links):
                     open_next_link()
                 return
+            
+            # Display the URL in the text box
+            update_gui_log("Trying to play: " + url)
 
             driver.get(url)
 
@@ -97,11 +100,11 @@ button_frame = tk.Frame(root)
 button_frame.pack(pady=10)
 
 open_link_button = tk.Button(button_frame, text="Play Next Video", command=open_next_link)
-open_link_button.pack(side=tk.LEFT)
+open_link_button.pack(side=tk.LEFT, padx=10)
 
 # Add a quit button
 quit_button = tk.Button(button_frame, text="Quit", command=root.quit)
-quit_button.pack(side=tk.LEFT)
+quit_button.pack(side=tk.LEFT, padx=10)
 
 log_text = scrolledtext.ScrolledText(root, state='disabled', height=10)
 log_text.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
