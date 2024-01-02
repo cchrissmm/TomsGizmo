@@ -37,6 +37,7 @@ def choose_and_play_file():
         media = vlc.Media(file_path)
         player.set_media(media)
         player.play()
+        player.set_fullscreen(True)
 
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
