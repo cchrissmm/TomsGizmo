@@ -25,9 +25,13 @@ def select_folder():
         with open("folder_path.txt", "w") as file:
             file.write(folder_path)
 
+# Global variable to keep track of the current index
+current_index = 0
+
 def choose_and_play_file():
-    """Stops current playback, chooses a random file, and plays it."""
+    """Stops current playback, chooses the next file, and plays it."""
     global player
+    global current_index
 
     # Stop current playback if it's happening
     if player.is_playing():
@@ -45,14 +49,14 @@ def choose_and_play_file():
         select_folder()
 
     try:
-        # Choose a random file from the folder
+        # Get a list of files from the folder
         files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
         if not files:
             messagebox.showinfo("Info", "No files found in the folder.")
             return
 
-        # Choose a random file
-        selected_file = random.choice(files)
+        # Get the next file
+        selected_file = files[current_index]
         file_path = os.path.join(folder_path, selected_file)
 
         # Play the selected file
@@ -61,23 +65,38 @@ def choose_and_play_file():
         player.play()
         player.set_fullscreen(True)
 
+        # Increment the current index, and loop back to 0 if it's at the end of the list
+        current_index = (current_index + 1) % len(files)
+
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
 
+def on_press(key):
+    """Handles key press events."""
+    try:
+        if key.char == 'b':
+            choose_and_play_file()
+    except AttributeError:
+        pass
+
 # Setup the GUI
 root = tk.Tk()
-root.title("Random File Player")
+root.title("Play")
 root.geometry('200x200')  # Window size
 root.attributes('-topmost', 1)
 
-play_button = tk.Button(root, text="Play Random File", command=choose_and_play_file)
-play_button.pack(pady=20)
+play_button = tk.Button(root, text="Play File", command=choose_and_play_file)
+play_button.pack(pady=5)
 
 select_folder_button = tk.Button(root, text="Select Folder", command=select_folder)
 select_folder_button.pack(pady=5)
 
 quit_button = tk.Button(root, text="Quit", command=root.quit)
-quit_button.pack(pady=10)
+quit_button.pack(pady=5)
+
+# Start the key listener
+listener = keyboard.Listener(on_press=on_press)
+listener.start()
 
 # Start the GUI event loop
 root.mainloop()
