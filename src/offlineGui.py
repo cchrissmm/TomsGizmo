@@ -3,8 +3,17 @@ import random
 import tkinter as tk
 import vlc
 from tkinter import messagebox
-import time
-import pyautogui
+from pynput import keyboard
+
+def on_press(key):
+    """Handles key press events."""
+    # Check if the 'b' key was pressed
+    if key == keyboard.KeyCode.from_char('b'):
+        choose_and_play_file()
+
+# Listener for button press
+listener = keyboard.Listener(on_press=on_press)
+listener.start()
 
 def choose_and_play_file():
     """Stops current playback, chooses a random file, and plays it."""
@@ -34,6 +43,7 @@ def choose_and_play_file():
 
 def on_quit():
     """Cleanup function to call before quitting."""
+    listener.stop()
     player.stop()
     root.quit()
 
