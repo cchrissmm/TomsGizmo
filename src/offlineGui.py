@@ -57,13 +57,16 @@ player = vlc.MediaPlayer()
 # Setup the GUI
 root = tk.Tk()
 root.title("Random File Player")
-root.geometry('400x200')  # Window size
+root.geometry('200x100+0+0')  # Window size
+
+# Make the window always stay on top
+root.attributes('-topmost', 1)
 
 play_button = tk.Button(root, text="Play Random File", command=choose_and_play_file)
-play_button.pack(pady=20)
+play_button.pack(pady=5)
 
 quit_button = tk.Button(root, text="Quit", command=on_quit)
-quit_button.pack(pady=10)
+quit_button.pack(pady=5)
 
 # Start the GUI event loop
 root.mainloop()
