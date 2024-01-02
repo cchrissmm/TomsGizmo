@@ -57,7 +57,7 @@ def open_next_link():
             WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'video')))
             driver.execute_script("document.querySelector('video').play();")
             # Wait for the fullscreen button to become clickable
-            fullscreen_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.ytp-fullscreen-button.ytp-button')))
+            fullscreen_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.ytp-size-button.ytp-button')))
             # Click the fullscreen button
             fullscreen_button.click()
             current_link_index += 1
