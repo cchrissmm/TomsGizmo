@@ -82,7 +82,7 @@ def on_press(key):
 # Setup the GUI
 root = tk.Tk()
 root.title("Play")
-root.geometry('200x200')  # Window size
+root.geometry('200x100+0+0')  # Window size
 root.attributes('-topmost', 1)
 
 play_button = tk.Button(root, text="Play File", command=choose_and_play_file)
