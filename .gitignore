@@ -8,6 +8,8 @@ Thumbs.db
 node_modules/
 jspm_packages/
 bower_components/
+build/
+dist/
 
 # Log files
 npm-debug.log
@@ -26,4 +28,5 @@ yarn-error.log
 *.tmp
 *.tmp.*
 *.sublime-*
+
 

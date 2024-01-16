@@ -5,7 +5,8 @@ SET PYTHON_SCRIPT=offlineGui.py
 
 REM Building the executable
 REM pyinstaller --onefile --windowed %PYTHON_SCRIPT%
-pyinstaller --onefile %PYTHON_SCRIPT%
+REM pyinstaller --onefile %PYTHON_SCRIPT%
+pyinstaller %PYTHON_SCRIPT%
 
 echo Build and copy process completed.
 pause
