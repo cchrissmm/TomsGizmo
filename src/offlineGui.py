@@ -1,35 +1,24 @@
 import os
-import random
 import tkinter as tk
 import vlc
 from tkinter import messagebox, filedialog
 from pynput import keyboard
-
-# Create a VLC player
-player = vlc.MediaPlayer()
-
-def select_folder():
-    """Opens a directory selection dialog and sets the selected directory as the folder path."""
-    global folder_path
-
-    # Open the directory selection dialog
-    folder_path = filedialog.askdirectory()
-
-    # Check if a directory was selected
-    if not folder_path:
-        messagebox.showinfo("Info", "No folder selected.")
-    else:
-        messagebox.showinfo("Info", f"Selected folder: {folder_path}")
-
-        # Save the selected folder path to a file
-        with open("folder_path.txt", "w") as file:
-            file.write(folder_path)
+import psutil
 
 # Global variable to keep track of the current index
 current_index = 0
+player = vlc.MediaPlayer()
+
+def get_removable_media_paths():
+    """Returns a list of mount points for all removable media currently inserted."""
+    removable_media_paths = []
+    for partition in psutil.disk_partitions():
+        if 'removable' in partition.opts:
+            removable_media_paths.append(partition.mountpoint)
+    return removable_media_paths
 
 def choose_and_play_file():
-    """Stops current playback, chooses the next file, and plays it."""
+    """Stops current playback, chooses the next file from removable media, and plays it."""
     global player
     global current_index
 
@@ -37,39 +26,38 @@ def choose_and_play_file():
     if player.is_playing():
         player.stop()
 
-    try:
-        # Load the folder path from a file
-        with open("folder_path.txt", "r") as file:
-            folder_path = file.read()
-    except FileNotFoundError:
-        folder_path = ""
+    # Get the paths of all removable media
+    removable_media_paths = get_removable_media_paths()
+    if not removable_media_paths:
+        messagebox.showinfo("Info", "No removable media found.")
+        return
 
-    # If the folder path is empty, open the select folder dialog
-    if not folder_path:
-        select_folder()
+    # Get a list of video files from the removable media
+    video_files = []
+    for path in removable_media_paths:
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.endswith(('.mp4', '.mkv', '.avi')):  # Add more video file extensions if needed
+                    video_files.append(os.path.join(root, file))
 
-    try:
-        # Get a list of files from the folder
-        files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-        if not files:
-            messagebox.showinfo("Info", "No files found in the folder.")
-            return
+    if not video_files:
+        messagebox.showinfo("Info", "No video files found on the removable media.")
+        return
 
-        # Get the next file
-        selected_file = files[current_index]
-        file_path = os.path.join(folder_path, selected_file)
+    # Get the next video file
+    selected_file = video_files[current_index]
+    file_path = selected_file
 
-        # Play the selected file
-        media = vlc.Media(file_path)
-        player.set_media(media)
-        player.play()
-        player.set_fullscreen(True)
+    # Play the selected file
+    media = vlc.Media(file_path)
+    player.set_media(media)
+    player.play()
+    player.set_fullscreen(True)
 
-        # Increment the current index, and loop back to 0 if it's at the end of the list
-        current_index = (current_index + 1) % len(files)
+    # Increment the current index, and loop back to 0 if it's at the end of the list
+    current_index = (current_index + 1) % len(video_files)
 
-    except Exception as e:
-        messagebox.showerror("Error", f"An error occurred: {e}")
+
 
 def on_press(key):
     """Handles key press events."""
