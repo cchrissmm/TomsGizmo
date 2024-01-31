@@ -1,0 +1,22 @@
+# Use an official Python runtime as a parent image
+FROM mitchallen/pi-cross-compile
+
+# Set the working directory in the container to /app
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install PyInstaller
+RUN pip install pyinstaller
+
+# Use environment variables for the script name and PyInstaller options
+# These will be passed in from the batch file
+ENV SCRIPT_NAME yourscript.py
+ENV PYINSTALLER_OPTIONS --onefile
+
+# Run PyInstaller to compile the script, using the environment variables
+CMD pyinstaller ${PYINSTALLER_OPTIONS} ${SCRIPT_NAME}

@@ -4,6 +4,10 @@ import vlc
 from tkinter import messagebox, filedialog
 from pynput import keyboard
 import psutil
+import logging
+
+# Configure logging
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 # Global variable to keep track of the current index
 current_index = 0
@@ -57,8 +61,6 @@ def choose_and_play_file():
     # Increment the current index, and loop back to 0 if it's at the end of the list
     current_index = (current_index + 1) % len(video_files)
 
-
-
 def on_press(key):
     """Handles key press events."""
     try:
@@ -76,8 +78,13 @@ root.attributes('-topmost', 1)
 play_button = tk.Button(root, text="Play File", command=choose_and_play_file)
 play_button.pack(pady=5)
 
-select_folder_button = tk.Button(root, text="Select Folder", command=select_folder)
-select_folder_button.pack(pady=5)
+# Configure logging
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+
+# Use logging in your application
+logging.info('This is an info message')
+logging.warning('This is a warning message')
+logging.error('This is an error message')
 
 quit_button = tk.Button(root, text="Quit", command=root.quit)
 quit_button.pack(pady=5)
