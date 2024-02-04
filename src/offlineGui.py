@@ -17,12 +17,15 @@ player = vlc.MediaPlayer()
 def get_removable_media_paths():
     """Returns a list of mount points for all removable media currently inserted."""
     removable_media_paths = []
-    base_path = '/media/chris'
+    base_path = '/media'
     if os.path.exists(base_path):
-        for dir_name in os.listdir(base_path):
-            full_path = os.path.join(base_path, dir_name)
-            if os.path.isdir(full_path):
-                removable_media_paths.append(full_path)
+        for user_dir in os.listdir(base_path):
+            user_path = os.path.join(base_path, user_dir)
+            if os.path.isdir(user_path):
+                for dir_name in os.listdir(user_path):
+                    full_path = os.path.join(user_path, dir_name)
+                    if os.path.isdir(full_path):
+                        removable_media_paths.append(full_path)
     return removable_media_paths
 
 def choose_and_play_file():

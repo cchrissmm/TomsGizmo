@@ -1,5 +1,7 @@
 # Toms Gizmo
+Using a program like 4k video downloader, download all the files that you want to view to a usb drive.
 
+Open the program, it will search for removable media like that USB drive and play the songs.
 
 ## Install VLC Media player
 VLC Needs to be installed first on the target system.
@@ -23,6 +25,9 @@ pyinstaller offlineGui.spec
 run 
 
 buildOfflineGui.bat
+
+
+
 
 
 
