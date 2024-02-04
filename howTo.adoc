@@ -1,7 +1,0 @@
-= Toms Gizmo
-
-== Tools
-You need to Firefox and then install
-
-https://github.com/mozilla/geckodriver/releases
-
