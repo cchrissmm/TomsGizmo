@@ -8,8 +8,8 @@ Thumbs.db
 node_modules/
 jspm_packages/
 bower_components/
-build/
-dist/
+src/build/
+src/dist/
 
 # Log files
 npm-debug.log

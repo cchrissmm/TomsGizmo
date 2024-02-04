@@ -14,10 +14,15 @@ pip install python-vlc
 There are a few to install, just run the .py and work out which ones
 
 ## Building for Linux
-run `pyinstaller offlineGui.spec`
+run 
+
+pyinstaller offlineGui.spec
+
 
 ## Building for Windows
-run `buildOfflineGui.bat`
+run 
+
+buildOfflineGui.bat
 
 
 
