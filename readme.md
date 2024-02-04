@@ -10,7 +10,9 @@ VLC Needs to be installed first on the target system.
 Download and install vlc from the VLC site
 
 ### VLC On Linux
-pip install python-vlc
+sudo apt install python3-vlc
+pip install pynput
+
 
 ## Depenedncies
 There are a few to install, just run the .py and work out which ones

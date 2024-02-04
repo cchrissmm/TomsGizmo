@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import os
 import tkinter as tk
 import vlc
 from tkinter import messagebox, filedialog
