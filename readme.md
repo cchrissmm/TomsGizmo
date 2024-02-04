@@ -20,9 +20,12 @@ There are a few to install, just run the .py and work out which ones
 pip install pynput
 
 ## Building for Linux
-run 
+run this for x86
 
-pyinstaller offlineGui.spec
+pyinstaller offlineGui.spec 
+
+run this for arm
+pyinstaller offlineGuiArch64.spec 
 
 
 ## Building for Windows
