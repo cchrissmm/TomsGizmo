@@ -6,6 +6,7 @@ from tkinter import messagebox, filedialog
 from pynput import keyboard
 import psutil
 import logging
+import time
 
 # Configure logging
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
@@ -63,6 +64,7 @@ def choose_and_play_file():
     media = vlc.Media(file_path)
     player.set_media(media)
     player.play()
+    time.sleep(1)
     player.set_fullscreen(True)
 
     # Increment the current index, and loop back to 0 if it's at the end of the list
@@ -73,14 +75,27 @@ def on_press(key):
     try:
         if key.char == 'b':
             choose_and_play_file()
+        if key.char == 'q':
+            root.quit()    
     except AttributeError:
         pass
 
 # Setup the GUI
 root = tk.Tk()
 root.title("Play")
-root.geometry('200x100+0+0')  # Window size
-root.attributes('-topmost', 1)
+root.attributes('-fullscreen', True)  # Make the Tkinter window fullscreen
+
+# Create a Frame and pack it
+frame = tk.Frame(root)
+frame.pack(fill=tk.BOTH, expand=1)
+
+# Create a Canvas and pack it
+canvas = tk.Canvas(frame)
+canvas.pack(fill=tk.BOTH, expand=1)
+
+# Embed the VLC player in the Canvas
+player.set_xwindow(canvas.winfo_id())
+
 
 play_button = tk.Button(root, text="Play File", command=choose_and_play_file)
 play_button.pack(pady=5)
