@@ -17,6 +17,8 @@ pip install pynput
 ## Depenedncies
 There are a few to install, just run the .py and work out which ones
 
+pip install pynput
+
 ## Building for Linux
 run 
 
