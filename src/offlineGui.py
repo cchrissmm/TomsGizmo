@@ -122,9 +122,6 @@ logging.error('This is an error message')
 #quit_button = tk.Button(root, text="Quit", command=root.quit)
 #quit_button.pack(pady=5)
 
-stop_button = tk.Button(root, text="Stop", command=player.stop)
-stop_button.pack(pady=5)
-
 # Start the key listener
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
