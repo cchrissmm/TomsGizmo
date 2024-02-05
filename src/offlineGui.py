@@ -96,9 +96,20 @@ canvas.pack(fill=tk.BOTH, expand=1)
 # Embed the VLC player in the Canvas
 player.set_xwindow(canvas.winfo_id())
 
+# Create a Frame for the buttons and pack it at the bottom
+button_frame = tk.Frame(root)
+button_frame.pack(side=tk.BOTTOM, fill=tk.X)
 
-play_button = tk.Button(root, text="Play File", command=choose_and_play_file)
-play_button.pack(pady=5)
+# Create the buttons and pack them on either side of the center
+play_button = tk.Button(button_frame, text="Play", command=choose_and_play_file,font=('Helvetica', '16'), width=20)
+play_button.pack(side=tk.LEFT, expand=True)
+
+stop_button = tk.Button(button_frame, text="Stop", command=player.stop, font=('Helvetica', '16'), width=20)
+stop_button.pack(side=tk.RIGHT, expand=True)
+
+# Create a Label and pack it to the left
+label = tk.Label(button_frame, text="Tom's Gizmo", font=('Helvetica', '16'))
+label.pack(side=tk.LEFT)
 
 # Configure logging
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
@@ -108,8 +119,8 @@ logging.info('This is an info message')
 logging.warning('This is a warning message')
 logging.error('This is an error message')
 
-quit_button = tk.Button(root, text="Quit", command=root.quit)
-quit_button.pack(pady=5)
+#quit_button = tk.Button(root, text="Quit", command=root.quit)
+#quit_button.pack(pady=5)
 
 # Start the key listener
 listener = keyboard.Listener(on_press=on_press)
