@@ -104,7 +104,7 @@ button_frame.pack(side=tk.BOTTOM, fill=tk.X)
 play_button = tk.Button(button_frame, text="Play", command=choose_and_play_file,font=('Helvetica', '16'), width=20)
 play_button.pack(side=tk.LEFT, expand=True)
 
-stop_button = tk.Button(button_frame, text="Stop", command=player.stop, font=('Helvetica', '16'), width=20)
+stop_button = tk.Button(button_frame, text="Stop", command=player.stop(), font=('Helvetica', '16'), width=20)
 stop_button.pack(side=tk.RIGHT, expand=True)
 
 # Create a Label and pack it to the left
