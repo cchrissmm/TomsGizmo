@@ -29,6 +29,10 @@ def get_removable_media_paths():
                         removable_media_paths.append(full_path)
     return removable_media_paths
 
+def stop():
+# Stop current playback 
+    player.stop()
+
 def choose_and_play_file():
     """Stops current playback, chooses the next file from removable media, and plays it."""
     global player
@@ -104,7 +108,7 @@ button_frame.pack(side=tk.BOTTOM, fill=tk.X)
 play_button = tk.Button(button_frame, text="Play", command=choose_and_play_file,font=('Helvetica', '16'), width=20)
 play_button.pack(side=tk.LEFT, expand=True)
 
-stop_button = tk.Button(button_frame, text="Stop", command=player.stop(), font=('Helvetica', '16'), width=20)
+stop_button = tk.Button(button_frame, text="Stop", command=stop, font=('Helvetica', '16'), width=20)
 stop_button.pack(side=tk.RIGHT, expand=True)
 
 # Create a Label and pack it to the left
