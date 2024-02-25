@@ -36,6 +36,9 @@ def stop():
 # Stop current playback 
     player.stop()
 
+def resume():
+    player.resume()
+
 def choose_and_play_file():
     """Stops current playback, chooses the next file from removable media, and plays it."""
     global player
@@ -91,7 +94,9 @@ def on_press(key):
         if key.char == 'q':
             if current_time - last_key_press_time['q'] > debounce_time:
                 root.quit()
-            last_key_press_time['q'] = current_time   
+            last_key_press_time['q'] = current_time 
+        if key.char == 'r':
+            resume()   
     except AttributeError:
         pass
 
