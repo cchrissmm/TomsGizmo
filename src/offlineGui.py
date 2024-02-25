@@ -100,6 +100,16 @@ def on_press(key):
     except AttributeError:
         pass
 
+def update_state():
+    # Get the current state of the player
+    state = player.get_state()
+
+    # Update the text box with the current state
+    state_text_box.delete(1.0, tk.END)
+    state_text_box.insert(tk.END, str(state))
+
+    # Schedule this function to be called again after 1000ms (1 second)
+    root.after(1000, update_state)
 # Setup the GUI
 root = tk.Tk()
 root.title("Play")
@@ -127,6 +137,13 @@ play_button.pack(side=tk.LEFT, expand=True)
 stop_button = tk.Button(button_frame, text="Stop", command=stop, font=('Helvetica', '16'), width=20)
 stop_button.pack(side=tk.RIGHT, expand=True)
 
+resume_button = tk.Button(button_frame, text="Resume", command=resume, font=('Helvetica', '16'), width=20)
+resume_button.pack(side=tk.RIGHT, expand=True)
+
+# Create a text box to display the state
+state_text_box = tk.Text(root, height=1, width=20)
+state_text_box.pack()
+
 # Create a Label and pack it to the left
 label = tk.Label(button_frame, text="Tom's Gizmo", font=('Helvetica', '16'))
 label.pack(side=tk.LEFT)
@@ -145,6 +162,9 @@ logging.error('This is an error message')
 # Start the key listener
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
+
+# Start updating the state
+update_state()
 
 # Start the GUI event loop
 root.mainloop()
