@@ -8,6 +8,9 @@ import psutil
 import logging
 import time
 
+last_key_press_time = {'b': 0, 'q': 0}
+debounce_time = 2  # in seconds
+
 # Configure logging
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
@@ -74,13 +77,21 @@ def choose_and_play_file():
     # Increment the current index, and loop back to 0 if it's at the end of the list
     current_index = (current_index + 1) % len(video_files)
 
+
+
 def on_press(key):
     """Handles key press events."""
+    global last_key_press_time
     try:
-        if key.char == 'b':
-            choose_and_play_file()
+        current_time = time.time()
+        if key.char == 'b': 
+            if current_time - last_key_press_time['b'] > debounce_time:
+                choose_and_play_file()
+            last_key_press_time['b'] = current_time
         if key.char == 'q':
-            root.quit()    
+            if current_time - last_key_press_time['q'] > debounce_time:
+                root.quit()
+            last_key_press_time['q'] = current_time   
     except AttributeError:
         pass
 
